@@ -1,5 +1,3 @@
-import PropTypes, { shape } from 'prop-types';
-import { nanoid } from 'nanoid';
 import { Formik, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import 'yup-phone-lite';
@@ -11,6 +9,9 @@ import {
   ErrorName,
   ErrorTel,
 } from './ContactForm.styled';
+import { useDispatch, useSelector } from 'react-redux';
+import { addContact } from 'redux/contactsSlice';
+import { getContacts } from 'redux/selectors';
 
 const INITIAL_STATE = {
   name: '',
@@ -24,18 +25,22 @@ const Schema = Yup.object().shape({
     .required('A phone number is required'),
 });
 
-export const ContactForm = ({ contacts, onChange }) => {
+export const ContactForm = () => {
+  const dispatch = useDispatch();
+  const contacts = useSelector(getContacts);
+
   const handleForm = (values, { resetForm }) => {
-    const id = nanoid();
     const { name, number } = values;
-    const isInConntacts = contacts.find(contact => contact.name === name);
+    const isInConntacts =
+      contacts.find(contact => contact.name === name) ||
+      contacts.find(contact => contact.number === number);
 
     if (isInConntacts) {
       alert(`${name} is already in contacts.`);
       return;
     }
 
-    onChange({ id, name, number });
+    dispatch(addContact({ name: name.trim(), number }));
     resetForm();
   };
 
@@ -69,13 +74,4 @@ export const ContactForm = ({ contacts, onChange }) => {
       </FormWrap>
     </Formik>
   );
-};
-
-ContactForm.propTypes = {
-  contacts: PropTypes.arrayOf(
-    shape({
-      name: PropTypes.string.isRequired,
-    })
-  ).isRequired,
-  onChange: PropTypes.func.isRequired,
 };
