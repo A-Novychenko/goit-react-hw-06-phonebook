@@ -1,24 +1,31 @@
 // import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
 import { FilterBox, Label, Search } from './Filter.styled';
+import { getFilter } from 'redux/selectors';
+import { setFilterValue } from 'redux/filterSlice';
 
-export const Filter = ({ filter, onChangeName }) => (
-  <FilterBox>
-    <Label>
-      Find contacts by name
-      <Search
-        type="text"
-        name="filter"
-        pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-        title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-        required
-        value={filter}
-        onChange={onChangeName}
-      ></Search>
-    </Label>
-  </FilterBox>
-);
+export const Filter = () => {
+  const dispatch = useDispatch();
+  const filter = useSelector(getFilter);
 
-// Filter.propTypes = {
-//   filter: PropTypes.string.isRequired,
-//   onChangeName: PropTypes.func.isRequired,
-// };
+  const handleChange = e => {
+    dispatch(setFilterValue(e.target.value));
+  };
+
+  return (
+    <FilterBox>
+      <Label>
+        Find contacts by name
+        <Search
+          type="text"
+          name="filter"
+          pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+          title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
+          required
+          value={filter}
+          onChange={handleChange}
+        ></Search>
+      </Label>
+    </FilterBox>
+  );
+};
