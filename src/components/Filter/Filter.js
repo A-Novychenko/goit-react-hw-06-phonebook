@@ -1,4 +1,3 @@
-// import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { FilterBox, Label, Search } from './Filter.styled';
 import { getFilter } from 'redux/selectors';
@@ -24,7 +23,7 @@ export const Filter = () => {
           required
           value={filter}
           onChange={handleChange}
-        ></Search>
+        />
       </Label>
     </FilterBox>
   );
