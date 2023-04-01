@@ -31,9 +31,10 @@ export const ContactForm = () => {
 
   const handleForm = (values, { resetForm }) => {
     const { name, number } = values;
-    const isInConntacts =
-      contacts.find(contact => contact.name === name) ||
-      contacts.find(contact => contact.number === number);
+    const isInConntacts = contacts.length
+      ? contacts.find(contact => contact.name === name) ||
+        contacts.find(contact => contact.number === number)
+      : false;
 
     if (isInConntacts) {
       alert(`${name} is already in contacts.`);

@@ -3,13 +3,15 @@ import { getContacts, getFilter } from 'redux/selectors';
 
 import { Contact } from 'components/Contact';
 import { List, Item } from './ContactList.styled';
+const filteredContacts = (contacts, filter) =>
+  contacts.filter(({ name }) => name.includes(filter.toLowerCase().trim()));
 
 export const ContactList = () => {
   const contacts = useSelector(getContacts);
   const filter = useSelector(getFilter);
-  const visibleContacts = contacts.filter(({ name }) =>
-    name.includes(filter.toLowerCase().trim())
-  );
+  const visibleContacts = contacts.length
+    ? filteredContacts(contacts, filter)
+    : [];
 
   return (
     <>
